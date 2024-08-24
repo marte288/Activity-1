@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Writing DOM</title>
+    <link rel="stylesheet" href="app.css" />
+  </head>
+  <body>
+    <div id="app"></div>
+    <script>
+      document.querySelector("#app").innerHTML = `
+            <h1>Register</h1>
+      <form id="registration-form">
+        <div class="form-control">
+          <label for="name">Name</label>
+          <input type="text" id="name" placeholder="Enter username" />
+          <p class="error" id="name-error"></p>
+        </div>
+
+        <div class="form-control">
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="Enter Email" />
+          <p class="error" id="email-error"></p>
+        </div>
+
+        <div class="form-control">
+          <label for="password">Password</label>
+          <input type="password" id="password" placeholder="Enter Password" />
+          <p class="error" id="password-error"></p>
+        </div>
+
+        <div class="form-control">
+          <label for="confirm-password">Confirm Password</label>
+          <input
+            type="password"
+            id="confirm-password"
+            placeholder="Confirm Password"
+          />
+          <p class="error" id="confirm-password-error"></p>
+        </div>
+
+        <button type="submit" id="submit">Submit</button>
+      </form>
+      `;
+      document.addEventListener("DOMContentLoaded", () => {
+        const fname = document.getElementById("name");
+        const email = document.getElementById("email");
+        const password = document.getElementById("password");
+        const confirmPasswordInput =
+          document.getElementById("confirm-password");
+        const form = document.getElementById("registration-form");
+        const buttonSubmit = document.getElementById("submit");
+
+        const fnameError = document.getElementById("name-error");
+        const emailError = document.getElementById("email-error");
+        const passwordError = document.getElementById("password-error");
+        const confirmPasswordError = document.getElementById(
+          "confirm-password-error"
+        );
+
+        buttonSubmit.addEventListener("click", (event) => {
+          event.preventDefault();
+
+          fnameError.textContent = "";
+          emailError.textContent = "";
+          passwordError.textContent = "";
+          confirmPasswordError.textContent = "";
+
+          let isValid = true;
+
+          if (fname.value === "" || fname.value == null) {
+            fnameError.textContent = "First Name is required.";
+            isValid = false;
+          }
+
+          const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailPattern.test(email.value.trim())) {
+            emailError.textContent = "Please enter a valid email address.";
+            isValid = false;
+          }
+
+          if (password.value === "" || password.value == null) {
+            passwordError.textContent = "Password is required.";
+            isValid = false;
+          }
+
+          const confirmPassword = confirmPasswordInput.value.trim();
+          if (password.value.trim() !== confirmPassword) {
+            confirmPasswordError.textContent = "Passwords do not match.";
+            isValid = false;
+          }
+          if (isValid) {
+            const confirmation = confirm(
+              `Please confirm your registration details:\n\nFirst Name: ${fname.value}\nEmail: ${email.value}\n\nAre these details correct?`
+            );
+
+            if (confirmation) {
+              alert("Registration successful!");
+              form.reset();
+            } else {
+              alert("Registration cancelled.");
+            }
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
